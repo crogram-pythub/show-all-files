@@ -1,2 +1,2 @@
-# show-all-files-for-mac
+# 显示系统隐藏文件 for Mac
 Show All Files for Mac
