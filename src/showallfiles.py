@@ -1,19 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2020, doudoudzj
+# Copyright (c) 2020-present, Jackson Dou
 # All rights reserved.
 #
-# InPanel is distributed under the terms of the (new) BSD License.
-# The full license can be found in 'LICENSE'.
-'''显示系统所有文件 for Mac'''
 
-__author__ = 'doudoudzj'
-__version__ = '0.0.1'
-__license__ = 'BSD'
+'''显示系统所有文件'''
+
+__author__ = 'Jackson Dou'
+__version__ = '0.0.2'
 
 from os import system as cmd
-from tkinter import Button, Tk, messagebox
+from tkinter import Button, Tk, Menu, messagebox
 
 
 def set_win_center(win, w, h):
@@ -23,21 +21,28 @@ def set_win_center(win, w, h):
     win.update()
 
 
-class App:
+class App(Tk):
     def __init__(self):
-        root = Tk()
-        root.title('显示系统所有文件')
-        set_win_center(root, 250, 150)
+        Tk.__init__(self)
+        self.title('显示所有文件')
+        set_win_center(self, 250, 150)
         # 窗口大小禁止拖拽
-        root.resizable(False, False)
+        self.resizable(False, False)
+        self.createcommand('tk::mac::ShowPreferences', self.about)
+        menubar = Menu(self)
 
-        Button(root, text='显示所有文件', command=self.show).pack(expand='yes')
-        Button(root, text='不显示隐藏文件', command=self.hide).pack(expand='yes')
-        Button(root, text='关于', command=self.about).pack(expand='yes')
-        Button(root, text='退出', command=self.close).pack(expand='yes')
+        # 关于 系统内置菜单：name='apple'，针对 Mac
+        m_app = Menu(menubar, name='apple')
+        m_app.add_command(label='关于 显示所有文件', command=self.about)
+        m_app.add_separator()
+        # 将下拉菜单加到菜单栏
+        menubar.add_cascade(label="显示所有文件", menu=m_app)
+        self.config(menu=menubar)
 
-        self.root = root
-        root.mainloop()
+        Button(self, text='显示所有文件', command=self.show).pack(expand='yes')
+        Button(self, text='不显示隐藏文件', command=self.hide).pack(expand='yes')
+        Button(self, text='关于', command=self.about).pack(expand='yes')
+        Button(self, text='退出', command=self.close).pack(expand='yes')
 
     def show(self):
         # 显示所有文件
@@ -70,12 +75,13 @@ class App:
     def about(self):
         # 关于
         txt = '作者：%s\n版本：%s' % (__author__, __version__)
-        messagebox.showinfo('关于', txt)
+        messagebox.showinfo(title='关于', message=txt, parent=self)
 
     def close(self):
-        self.root.quit()
+        self.quit()
         exit()
 
 
 if __name__ == '__main__':
-    App()
+    app = App()
+    app.mainloop()

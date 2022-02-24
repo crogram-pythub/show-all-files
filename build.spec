@@ -1,74 +1,68 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-BLOCK_CIPHER = None
-APP_NAME = '显示系统所有文件'
-APP_EXE = 'mac_show_all_files'
-APP_APP = '显示系统所有文件.app'
-APP_VERSION = '0.0.1'
-SCRIPTS = ['mac_show_all_files.py']
-BINARIES = []
-DATAS = []
-HIDDEN_IMPORTS = []  # 源文件的依赖模块
-HOOKSPATH = []
-EXCLUDES = []  # 不需要打包的模块
-RUNTIME_HOOKS = []
-BUNDLE_IDENTIFIER = 'com.pythub.app.mac_show_all_files'  # 一般情况下Bundle ID的格式为：com.公司名称.项目名称
-UPX = True  # 如果有UPX安装(执行Configure.py时检测),会压缩执行文件(Windows系统中的DLL也会)
-PATHEX = ['.']
-COPYRIGHT = 'Copyright © 2020, doudoudzj, All Rights Reserved'
 
-a = Analysis(SCRIPTS,
-             pathex=PATHEX,
-             binaries=BINARIES,
-             datas=DATAS,
-             hiddenimports=HIDDEN_IMPORTS,
-             hookspath=HOOKSPATH,
-             runtime_hooks=RUNTIME_HOOKS,
-             excludes=EXCLUDES,
+block_cipher = None
+
+APP_NAME = '显示所有文件'
+APP_APP = 'ShowAllFiles.app'
+APP_VERSION = '0.0.2'
+BUNDLE_IDENTIFIER = 'org.pythub.app.show_all_files'
+
+
+a = Analysis(['src/showallfiles.py'],
+             pathex=[],
+             binaries=[],
+             datas=[],
+             hiddenimports=[],
+             hookspath=[],
+             hooksconfig={},
+             runtime_hooks=[],
+             excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
-             cipher=BLOCK_CIPHER,
+             cipher=block_cipher,
              noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data, cipher=BLOCK_CIPHER)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+
 exe = EXE(pyz,
-          a.scripts, [],
+          a.scripts, 
+          [],
           exclude_binaries=True,
           name=APP_NAME,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
-          upx=UPX,
-          console=False)
+          upx=True,
+          console=False,
+          disable_windowed_traceback=False,
+          target_arch=None,
+          codesign_identity=None,
+          entitlements_file=None)
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
-               a.datas,
+               a.datas, 
                strip=False,
-               upx=UPX,
+               upx=True,
                upx_exclude=[],
                name=APP_NAME)
 app = BUNDLE(coll,
-             name=APP_APP,
-             icon=None,
-             bundle_identifier=BUNDLE_IDENTIFIER)
-
-app = BUNDLE(
-    coll,
-    name=APP_APP,
-    icon=None,
-    bundle_identifier=BUNDLE_IDENTIFIER,
-    info_plist={
-        'CFBundleName': APP_NAME,
-        'CFBundleDisplayName': 'APP_NAME',
-        'CFBundleExecutable': APP_NAME,
-        'CFBundlePackageType': 'APPL',
-        'CFBundleSupportedPlatforms': 'MacOSX',
-        'CFBundleGetInfoString': "doudoudzj",
-        'CFBundleIdentifier': BUNDLE_IDENTIFIER,
-        'CFBundleVersion': APP_VERSION,
-        'CFBundleInfoDictionaryVersion': APP_VERSION,
-        'CFBundleShortVersionString': APP_VERSION,
-        'NSHighResolutionCapable': True,
-        'NSHumanReadableCopyright': COPYRIGHT
-    }
-)
+            name=APP_APP,
+            icon='resources/logo.icns',
+            bundle_identifier=BUNDLE_IDENTIFIER,
+            info_plist={
+                'CFBundleName': APP_NAME,
+                'CFBundleDisplayName': APP_NAME,
+                'CFBundleExecutable': APP_NAME,
+                'CFBundlePackageType': 'APPL',
+                'CFBundleSupportedPlatforms': ['MacOSX'],
+                'CFBundleGetInfoString': "Jackson Dou",
+                'CFBundleIdentifier': BUNDLE_IDENTIFIER,
+                'CFBundleVersion': APP_VERSION,
+                'CFBundleInfoDictionaryVersion': APP_VERSION,
+                'CFBundleShortVersionString': APP_VERSION,
+                'NSHighResolutionCapable': True,
+                'LSApplicationCategoryType': 'public.app-category.utilities',
+                'NSHumanReadableCopyright': 'Copyright © 2020-2022 Jackson Dou, All Rights Reserved'
+            })
